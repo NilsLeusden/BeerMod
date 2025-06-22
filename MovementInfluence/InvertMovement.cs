@@ -15,7 +15,7 @@ namespace BeerMod.MovementInfluence
 		{
 			if (BeerValuable.BeerValuableClass.InvertInputActive)
 			{
-				Debug.Log("EDITING LOCAL INPUTMOVEMENT X");
+				// Debug.Log("EDITING LOCAL INPUTMOVEMENT X");
 				__result = -__result;
 			}
 		}
@@ -25,7 +25,7 @@ namespace BeerMod.MovementInfluence
 		{
 			if (BeerValuable.BeerValuableClass.InvertInputActive)
 			{
-				 Debug.Log("EDITING LOCAL INPUTMOVEMENT Y");
+				//  Debug.Log("EDITING LOCAL INPUTMOVEMENT Y");
 				__result = -__result;
 			}
 		}
@@ -35,11 +35,12 @@ namespace BeerMod.MovementInfluence
 	{
 		static void Postfix(PlayerController __instance)
 		{
-			if (!BeerValuable.BeerValuableClass.InvertInputActive) return;
-
-			float mx = Input.GetAxis("Mouse X");
-			float my = Input.GetAxis("Mouse Y");
-			__instance.cameraGameObject.transform.Rotate(-my, -mx, 0f);
+			if (BeerValuable.BeerValuableClass.InvertInputActive)
+			{
+				float mx = Input.GetAxis("Mouse X");
+				float my = Input.GetAxis("Mouse Y");
+				__instance.cameraGameObject.transform.Rotate(-my, -mx, 0f);
+			}
 		}
 	}
 }

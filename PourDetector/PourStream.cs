@@ -9,6 +9,9 @@ namespace BeerMod.PourStream
 	{
 		private LineRenderer lineRenderer = null;
 
+		[Header("Pour audio from Sound.cs")]
+		public Sound pourSound;
+
 		private ParticleSystem splashParticle = null;
 		private ParticleSystem.EmissionModule splashEmission;
 
@@ -21,6 +24,8 @@ namespace BeerMod.PourStream
 		private float arcHeight;
 		private void Awake()
 		{
+			if (pourSound == null)
+				Debug.LogError("pourStream wasn't assigned/found in the inspector!");
 			segmentCount = Settings.SettingsClass.segmentCount.Value;
 			arcHeight = Settings.SettingsClass.arcHeight.Value;
 			lineRenderer = GetComponent<LineRenderer>();
@@ -46,6 +51,11 @@ namespace BeerMod.PourStream
 		{
 			while (gameObject.activeSelf)
 			{
+				if (pourSound != null)
+				{
+					Debug.Log("PLAYING POUR SOUND!");
+					pourSound.PlayLoop(true, fadeInSpeed: 0.1f, fadeOutSpeed: 0.1f);
+				}
 				targetPosition = FindEndPoint();
 				DrawParabolicArc(transform.position, targetPosition);
 				yield return null;
@@ -70,8 +80,13 @@ namespace BeerMod.PourStream
 
 		public void End()
 		{
+			if (pourSound != null)
+			{
+				Debug.Log("STOPPING POUR SOUND!!!!!!!!!!!!!");
+				pourSound.PlayLoop(playing: false, fadeInSpeed: 0.1f, fadeOutSpeed: 0.1f);
+			}
 			if (pourRoutine != null)
-				StopCoroutine(pourRoutine);
+					StopCoroutine(pourRoutine);
 			pourRoutine = StartCoroutine(EndPour());
 		}
 

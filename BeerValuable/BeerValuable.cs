@@ -18,8 +18,48 @@ namespace BeerMod.BeerValuable
 
 		private static readonly string[] beerPhrases =
 		{
-			"Burp",
-			"I love this beer"
+			"Burppp",
+			"I love this beer!",
+			"Get me my car keys!",
+			"REPO beer is the best!",
+			"It's 5 PM somewhere!",
+			"Why is the room spinning?",
+			"This one's for the boys!",
+			"I'm totally fine, trust me.",
+			"Another round!",
+			"This better not be non-alcoholic.",
+			"Suddenly, I can dance.",
+			"Hold my beer and watch this.",
+			"That hit different...",
+			"Is this FDA approved?",
+			"Was that a cop?",
+			"Let’s make poor decisions!",
+			"Who put a steering wheel on the ceiling?",
+			"Chug! Chug! Chug!",
+			"Wait... was that glass?",
+			"I feel powerful. And confused.",
+			"This tastes like victory.",
+			"Gimme another!",
+			"Wh-where'd my hands go?",
+			"I ain’t even that drunk...",
+			"This beer... it gets me.",
+			"Isss jus' one beer, officer.",
+			"Lemme tell you somethin’...",
+			"I can totally drive. No, really.",
+			"You’re my best friend now.",
+			"Wait, did I drink it or drop it?",
+			"I swear I saw a unicorn.",
+			"Why is everything upside down?",
+			"I'm walkin' perfectly fine!",
+			"Who turned down gravity?",
+			"Beer makes you fast—science!",
+			"Shhh... I’m hiding from the floor.",
+			"Is this my hand or yours?",
+			"Time is fake. Beer is real.",
+			"Y’all ever hear colors?",
+			"I’m not drunk, you're drunk.",
+			"Heh... gravity’s overrated anyway.",
+			"I love you, random object."
 		};
 
 		private bool stateStart;
@@ -33,8 +73,6 @@ namespace BeerMod.BeerValuable
 		private float invertDuration = Settings.SettingsClass.invertDuration.Value;
 
 		public Transform particleSystemTransform;
-
-		public Sound soundTimeGlassLoop;
 
 		private float soundPitchLerp;
 
@@ -118,36 +156,10 @@ namespace BeerMod.BeerValuable
 			if (stateStart)
 			{
 				_invertRoutine = StartCoroutine(InversionCycle());
+				SendMessage();
 				stateStart = false;
 			}
-			if (!particleSystemTransform)
-				Debug.LogError("ParticleSystemTransform not found!");
-			if (particleSystemTransform != null && particleSystemTransform.gameObject.activeSelf)
-			{
 
-				List<PhysGrabber> playerGrabbing = physGrabObject.playerGrabbing;
-				if (playerGrabbing.Count > particleFocus)
-				{
-					PhysGrabber physGrabber = playerGrabbing[particleFocus];
-					if ((bool)physGrabber)
-					{
-						Transform headLookAtTransform = physGrabber.playerAvatar.playerAvatarVisuals.headLookAtTransform;
-						if ((bool)headLookAtTransform)
-						{
-							particleSystemTransform.LookAt(headLookAtTransform);
-						}
-						particleFocus++;
-					}
-					else
-					{
-						particleFocus = 0;
-					}
-				}
-				else
-				{
-					particleFocus = 0;
-				}
-			}
 			soundPitchLerp = Mathf.Lerp(soundPitchLerp, 1f, Time.deltaTime * 2f);
 			foreach (PhysGrabber item in physGrabObject.playerGrabbing)
 			{
@@ -158,8 +170,6 @@ namespace BeerMod.BeerValuable
 			}
 			if (SemiFunc.IsMasterClientOrSingleplayer())
 			{
-				//physGrabObject.OverrideDrag(1f);
-				//physGrabObject.OverrideAngularDrag(0.5f);
 				if (!physGrabObject.grabbed)
 				{
 					SetState(States.Idle);
@@ -167,23 +177,30 @@ namespace BeerMod.BeerValuable
 			}
 			if (physGrabObject.grabbedLocal)
 			{
-				PlayerAvatar instance = PlayerAvatar.instance;
-				if ((bool)instance.voiceChat)
-				{
-					instance.voiceChat.OverridePitch(Settings.SettingsClass.voiceChatPitch.Value, 1f, 2f);
-					instance.voiceChat.
-				}
-				instance.OverridePupilSize(Settings.SettingsClass.pupilSize.Value, 4, 1f, 1f, 5f, 0.5f);
-				PlayerController.instance.OverrideSpeed(Settings.SettingsClass.playerSpeed.Value);
-				PlayerController.instance.OverrideLookSpeed(Settings.SettingsClass.lookSpeed.Value, 2f, 1f);
-				PlayerController.instance.OverrideAnimationSpeed(Settings.SettingsClass.animationSpeed.Value, 1f, 2f);
-				PlayerController.instance.OverrideTimeScale(Settings.SettingsClass.timeScale.Value);
-				physGrabObject.OverrideTorqueStrength(Settings.SettingsClass.torqueStrength.Value);
-				CameraZoom.Instance.OverrideZoomSet(Settings.SettingsClass.zoomSize.Value, 0.1f, 0.5f, 1f, base.gameObject, 0);
-				PostProcessing.Instance.SaturationOverride(Settings.SettingsClass.saturation.Value, 0.1f, 0.5f, 0.1f, base.gameObject);
-				PostProcessing.Instance.VignetteOverride(Color.black, 0.5f, 1f, 1f, 0.5f, 0.1f, base.gameObject);
+				GrabEffects();
 			}
 		}
+
+		private void GrabEffects()
+		{
+			//physGrabObject.OverrideDrag(1f);
+			//physGrabObject.OverrideAngularDrag(0.5f);
+			PlayerAvatar instance = PlayerAvatar.instance;
+			if ((bool)instance.voiceChat)
+			{
+				instance.voiceChat.OverridePitch(Settings.SettingsClass.voiceChatPitch.Value, 1f, 2f);
+			}
+			instance.OverridePupilSize(Settings.SettingsClass.pupilSize.Value, 4, 1f, 1f, 5f, 0.5f);
+			PlayerController.instance.OverrideSpeed(Settings.SettingsClass.playerSpeed.Value);
+			PlayerController.instance.OverrideLookSpeed(Settings.SettingsClass.lookSpeed.Value, 2f, 1f);
+			PlayerController.instance.OverrideAnimationSpeed(Settings.SettingsClass.animationSpeed.Value, 1f, 2f);
+			PlayerController.instance.OverrideTimeScale(Settings.SettingsClass.timeScale.Value);
+			physGrabObject.OverrideTorqueStrength(Settings.SettingsClass.torqueStrength.Value);
+			CameraZoom.Instance.OverrideZoomSet(Settings.SettingsClass.zoomSize.Value, 0.1f, 0.5f, 1f, base.gameObject, 0);
+			PostProcessing.Instance.SaturationOverride(Settings.SettingsClass.saturation.Value, 0.1f, 0.5f, 0.1f, base.gameObject);
+			PostProcessing.Instance.VignetteOverride(Color.black, 0.5f, 1f, 1f, 0.5f, 0.1f, base.gameObject);
+		}
+
 		private IEnumerator InversionCycle()
 		{
 			while (physGrabObject != null && physGrabObject.grabbedLocal)
@@ -196,5 +213,21 @@ namespace BeerMod.BeerValuable
 				InvertInputActive = false;
 			}
 		}
+		public void ResetInversion()
+		{
+			StopAllCoroutines();
+			InvertInputActive = false;
+		}
+		private void SendMessage()
+		{
+			string message = beerPhrases[Random.Range(0, beerPhrases.Length)];
+			Color textColor =new Color(0.95f, 0.8f, 0.1f, 1f);
+			ChatManager.instance.PossessChatScheduleStart(10);
+			ChatManager.instance.PossessChat(ChatManager.PossessChatID.LovePotion, message, 1f, textColor);
+			ChatManager.instance.PossessChatScheduleEnd();
+			return;
+		}
+
 	}
+
 }
