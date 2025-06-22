@@ -24,7 +24,7 @@ namespace BeerMod.Core
 	
 			Settings.SettingsClass.Initialize(Config);
 
-		Logger.LogError($"[Config] pourAngle={Settings.SettingsClass.pourAngle.Value}, voiceChatPitch={Settings.SettingsClass.voiceChatPitch.Value}, "
+		Logger.LogInfo($"[Config] pourAngle={Settings.SettingsClass.pourAngle.Value}, voiceChatPitch={Settings.SettingsClass.voiceChatPitch.Value}, "
 			+ $"playerSpeed={Settings.SettingsClass.playerSpeed.Value}, lookSpeed={Settings.SettingsClass.lookSpeed.Value}, …");
 			Patch();
 

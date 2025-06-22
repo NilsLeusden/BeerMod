@@ -13,7 +13,6 @@ namespace BeerMod.BeerValuableBreak
 			if (beer != null)
 			{
 				beer.ResetInversion();
-				Debug.Log("[BeerMod] Input inversion cleared on beer break.");
 			}
 		}
 	}

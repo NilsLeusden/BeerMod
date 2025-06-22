@@ -27,7 +27,7 @@ namespace BeerMod.BeerValuable
 			"This one's for the boys!",
 			"I'm totally fine, trust me.",
 			"Another round!",
-			"This better not be non-alcoholic.",
+			"This better not be non alcoholic.",
 			"Suddenly, I can dance.",
 			"Hold my beer and watch this.",
 			"That hit different...",
@@ -40,7 +40,7 @@ namespace BeerMod.BeerValuable
 			"I feel powerful. And confused.",
 			"This tastes like victory.",
 			"Gimme another!",
-			"Wh-where'd my hands go?",
+			"Wh where'd my hands go?",
 			"I ain’t even that drunk...",
 			"This beer... it gets me.",
 			"Isss jus' one beer, officer.",
@@ -57,30 +57,48 @@ namespace BeerMod.BeerValuable
 			"Is this my hand or yours?",
 			"Time is fake. Beer is real.",
 			"Y’all ever hear colors?",
+			"My sanity left the bar hours ago!",
 			"I’m not drunk, you're drunk.",
 			"Heh... gravity’s overrated anyway.",
-			"I love you, random object."
+			"I love you, random object.",
+			"What seems to be the officer, problem?",
+			"I dare you to steal my beer!"
+
 		};
 
 		private bool stateStart;
+
 		private PhysGrabObject physGrabObject;
 
 		private PhotonView photonView;
 
 		private float minInvertInterval = Settings.SettingsClass.minInvert.Value;
 		private float maxInvertInterval = Settings.SettingsClass.maxInvert.Value;
-
 		private float invertDuration = Settings.SettingsClass.invertDuration.Value;
-
-		public Transform particleSystemTransform;
+		private float defaultBloomIntensity = LevelGenerator.Instance.Level.BloomIntensity;
+		private float defaultBloomThreshold = LevelGenerator.Instance.Level.BloomThreshold;
+		private float voiceChatPitch = Settings.SettingsClass.voiceChatPitch.Value;
+		private float playerSpeed = Settings.SettingsClass.playerSpeed.Value;
+		private float lookSpeed = Settings.SettingsClass.playerSpeed.Value;
+		private float animationSpeed = Settings.SettingsClass.animationSpeed.Value;
+		private float timeScale = Settings.SettingsClass.timeScale.Value;
+		private float torqueStrength = Settings.SettingsClass.torqueStrength.Value;
+		private float pupilSize = Settings.SettingsClass.pupilSize.Value;
+		private float zoomSize = Settings.SettingsClass.zoomSize.Value;
+		private float saturation = Settings.SettingsClass.saturation.Value;
+		private float vignette = Settings.SettingsClass.vignette.Value;
+		private float motionBlur = Settings.SettingsClass.motionBlur.Value;
+		private float bloomIntensity = Settings.SettingsClass.bloomIntensity.Value;
+		private float bloomThreshold = Settings.SettingsClass.bloomThreshold.Value;
+		private float contrast = Settings.SettingsClass.contrast.Value;
 
 		private float soundPitchLerp;
 
 		private Renderer beerValuableRenderer;
 
-		private States currentState;
+		private float _normalShutterAngle;
 
-		private int particleFocus;
+		private States currentState;
 
 		public static bool InvertInputActive { get; private set; }
 
@@ -91,7 +109,7 @@ namespace BeerMod.BeerValuable
 			physGrabObject = GetComponent<PhysGrabObject>();
 			beerValuableRenderer = GetComponentInChildren<MeshRenderer>(true);
 			photonView = GetComponent<PhotonView>();
-
+			_normalShutterAngle = PostProcessing.Instance.motionBlur.shutterAngle.value;
 			if (physGrabObject == null)
 				Debug.LogError("PhysGrabObject not found!");
 			if (beerValuableRenderer == null)
@@ -141,6 +159,9 @@ namespace BeerMod.BeerValuable
 					StopCoroutine(_invertRoutine);
 				_invertRoutine = null;
 				InvertInputActive = false;
+				PostProcessing.Instance.motionBlur.shutterAngle.value = _normalShutterAngle;
+				LevelGenerator.Instance.Level.BloomIntensity = defaultBloomIntensity;
+				LevelGenerator.Instance.Level.BloomThreshold = defaultBloomThreshold;
 			}
 			if (SemiFunc.IsMasterClientOrSingleplayer() && physGrabObject.grabbed)
 			{
@@ -162,7 +183,7 @@ namespace BeerMod.BeerValuable
 			{
 				if ((bool)item && !item.isLocal)
 				{
-					item.playerAvatar.voiceChat.OverridePitch(Settings.SettingsClass.voiceChatPitch.Value, 1f, 2f);
+					item.playerAvatar.voiceChat.OverridePitch(voiceChatPitch, 1f, 2f);
 				}
 			}
 			if (SemiFunc.IsMasterClientOrSingleplayer())
@@ -185,17 +206,21 @@ namespace BeerMod.BeerValuable
 			PlayerAvatar instance = PlayerAvatar.instance;
 			if ((bool)instance.voiceChat)
 			{
-				instance.voiceChat.OverridePitch(Settings.SettingsClass.voiceChatPitch.Value, 1f, 2f);
+				instance.voiceChat.OverridePitch(voiceChatPitch, 1f, 2f);
 			}
-			instance.OverridePupilSize(Settings.SettingsClass.pupilSize.Value, 4, 1f, 1f, 5f, 0.5f);
-			PlayerController.instance.OverrideSpeed(Settings.SettingsClass.playerSpeed.Value);
-			PlayerController.instance.OverrideLookSpeed(Settings.SettingsClass.lookSpeed.Value, 2f, 1f);
-			PlayerController.instance.OverrideAnimationSpeed(Settings.SettingsClass.animationSpeed.Value, 1f, 2f);
-			PlayerController.instance.OverrideTimeScale(Settings.SettingsClass.timeScale.Value);
-			physGrabObject.OverrideTorqueStrength(Settings.SettingsClass.torqueStrength.Value);
-			CameraZoom.Instance.OverrideZoomSet(Settings.SettingsClass.zoomSize.Value, 0.1f, 0.5f, 1f, base.gameObject, 0);
-			PostProcessing.Instance.SaturationOverride(Settings.SettingsClass.saturation.Value, 0.1f, 0.5f, 0.1f, base.gameObject);
-			PostProcessing.Instance.VignetteOverride(Color.black, 0.5f, 1f, 1f, 0.5f, 0.1f, base.gameObject);
+			instance.OverridePupilSize(pupilSize, 4, 1f, 1f, 5f, 0.5f);
+			PlayerController.instance.OverrideSpeed(playerSpeed);
+			PlayerController.instance.OverrideLookSpeed(lookSpeed, 2f, 1f);
+			PlayerController.instance.OverrideAnimationSpeed(animationSpeed, 1f, 2f);
+			PlayerController.instance.OverrideTimeScale(timeScale);
+			physGrabObject.OverrideTorqueStrength(torqueStrength);
+			CameraZoom.Instance.OverrideZoomSet(zoomSize, 0.1f, 0.5f, 1f, base.gameObject, 0);
+			PostProcessing.Instance.SaturationOverride(saturation, 0.1f, 0.5f, 0.1f, base.gameObject);
+			PostProcessing.Instance.VignetteOverride(Color.black, vignette, 1f, 1f, 0.5f, 0.1f, base.gameObject);
+			PostProcessing.Instance.motionBlur.shutterAngle.value = motionBlur;
+			PostProcessing.Instance.ContrastOverride(contrast, 1f, 1f, 1f, base.gameObject);
+			LevelGenerator.Instance.Level.BloomIntensity = bloomIntensity;
+			LevelGenerator.Instance.Level.BloomThreshold = bloomThreshold;
 		}
 
 		private IEnumerator InversionCycle()

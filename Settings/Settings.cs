@@ -19,6 +19,12 @@ namespace BeerMod.Settings
 		public static ConfigEntry<float> minInvert { get; private set; }
 		public static ConfigEntry<float> maxInvert { get; private set; }
 		public static ConfigEntry<float> invertDuration { get; private set; }
+		public static ConfigEntry<float> vignette { get; private set; }
+		public static ConfigEntry<float> motionBlur { get; private set; }
+		public static ConfigEntry<float> bloomIntensity { get; private set; }
+		public static ConfigEntry<float> bloomThreshold { get; private set; }
+		public static ConfigEntry<float> contrast { get; private set; }
+
 
 		public static void Initialize(ConfigFile config)
 		{
@@ -97,7 +103,7 @@ namespace BeerMod.Settings
 			saturation = config.Bind<float>(
 				"Saturation",
 				"Saturation difference",
-				15f,
+				2f,
 				new ConfigDescription(
 				"Saturation difference when holding the beer",
 				new AcceptableValueRange<float>(1f, 50f)
@@ -141,6 +147,46 @@ namespace BeerMod.Settings
 				new ConfigDescription(
 				"inverted movement duration",
 				new AcceptableValueRange<float>(2f, 20f)
+				));
+			vignette = config.Bind<float>(
+				"vignette",
+				"vignette intensity",
+				0.5f,
+				new ConfigDescription(
+				"player's vision vignette intensity",
+				new AcceptableValueRange<float>(0f, 200f)
+				));
+			motionBlur = config.Bind<float>(
+				"MotionBlur",
+				"MotionBlur intensity",
+				0.5f,
+				new ConfigDescription(
+				"player's motionblur intensity",
+				new AcceptableValueRange<float>(0f, 20f)
+				));
+			bloomIntensity = config.Bind<float>(
+				"Bloom",
+				"bloom Intensity",
+				1f,
+				new ConfigDescription(
+				"player's bloom intensity",
+				new AcceptableValueRange<float>(0f, 20f)
+				));
+			bloomThreshold = config.Bind<float>(
+				"Bloom",
+				"bloom Threshold",
+				0.5f,
+				new ConfigDescription(
+				"player's bloom Threshold",
+				new AcceptableValueRange<float>(0f, 20f)
+				));
+			contrast = config.Bind<float>(
+				"Contrast",
+				"Contrast intensity",
+				0.5f,
+				new ConfigDescription(
+				"player's contrast intensity",
+				new AcceptableValueRange<float>(0f, 20f)
 				));
 		}
 	}

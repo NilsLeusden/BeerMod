@@ -53,7 +53,6 @@ namespace BeerMod.PourStream
 			{
 				if (pourSound != null)
 				{
-					Debug.Log("PLAYING POUR SOUND!");
 					pourSound.PlayLoop(true, fadeInSpeed: 0.1f, fadeOutSpeed: 0.1f);
 				}
 				targetPosition = FindEndPoint();
@@ -82,7 +81,6 @@ namespace BeerMod.PourStream
 		{
 			if (pourSound != null)
 			{
-				Debug.Log("STOPPING POUR SOUND!!!!!!!!!!!!!");
 				pourSound.PlayLoop(playing: false, fadeInSpeed: 0.1f, fadeOutSpeed: 0.1f);
 			}
 			if (pourRoutine != null)
