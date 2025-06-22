@@ -101,17 +101,14 @@ namespace BeerMod.BeerValuable
 		{
 			if (beerValuableRenderer == null)
 				return;
-			if (SemiFunc.IsMultiplayer())
+			switch (currentState)
 			{
-				switch (currentState)
-				{
-					case States.Active:
-						StateActive();
-						break;
-					case States.Idle:
-						StateIdle();
-						break;
-				}
+				case States.Active:
+					StateActive();
+					break;
+				case States.Idle:
+					StateIdle();
+					break;
 			}
 		}
 
