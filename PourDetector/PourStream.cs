@@ -7,16 +7,16 @@ namespace BeerMod.PourStream
 {
 	public class PourStreamClass : MonoBehaviour
 	{
-		private LineRenderer lineRenderer = null;
+		private LineRenderer? lineRenderer;
 
 		[Header("Pour audio from Sound.cs")]
-		public Sound pourSound;
+		public Sound? pourSound;
 
-		private ParticleSystem splashParticle = null;
+		private ParticleSystem? splashParticle;
 		private ParticleSystem.EmissionModule splashEmission;
 
 
-		private Coroutine pourRoutine = null;
+		private Coroutine? pourRoutine;
 
 		private Vector3 targetPosition = Vector3.zero;
 
@@ -26,19 +26,24 @@ namespace BeerMod.PourStream
 		{
 			if (pourSound == null)
 				Debug.LogError("pourStream wasn't assigned/found in the inspector!");
-			segmentCount = Settings.SettingsClass.segmentCount.Value;
-			arcHeight = Settings.SettingsClass.arcHeight.Value;
+			segmentCount = Settings.SettingsClass.SegmentCount!.Value;
+			arcHeight = Settings.SettingsClass.ArcHeight!.Value;
 			lineRenderer = GetComponent<LineRenderer>();
 			lineRenderer.positionCount = segmentCount;
 			splashParticle = GetComponentInChildren<ParticleSystem>();
 			splashEmission = splashParticle.emission;
 			splashEmission.enabled = false;
+			if (pourSound == null || lineRenderer == null || splashParticle == null)
+			{
+				enabled = false;
+				return;
+			}
 		}
 
 		private void Start()
 		{
 			for (int i = 0; i < segmentCount; i++)
-				lineRenderer.SetPosition(i, transform.position);
+				lineRenderer!.SetPosition(i, transform.position);
 		}
 
 		public void Begin()
@@ -73,7 +78,7 @@ namespace BeerMod.PourStream
 				Vector3 point = Vector3.Lerp(start, end, normalizedI);
 				float heightOffset = 4f * height * normalizedI * (1f - normalizedI);
 				point += arcDirection * heightOffset;
-				lineRenderer.SetPosition(i, point);
+				lineRenderer!.SetPosition(i, point);
 			}
 		}
 
@@ -96,7 +101,7 @@ namespace BeerMod.PourStream
 				bool allAtEnd = true;
 				for (int i = 0; i < segmentCount; i++)
 				{
-					Vector3 current = lineRenderer.GetPosition(i);
+					Vector3 current = lineRenderer!.GetPosition(i);
 					Vector3 next = Vector3.MoveTowards(current, targetPosition, Time.deltaTime * 2f);
 					lineRenderer.SetPosition(i, next);
 					if (next != targetPosition)
@@ -120,26 +125,26 @@ namespace BeerMod.PourStream
 
 		private void MoveToPosition(int index, Vector3 targetPosition)
 		{
-			lineRenderer.SetPosition(index, targetPosition);
+			lineRenderer!.SetPosition(index, targetPosition);
 		}
 
 		private void AnimateToPosition(int index, Vector3 targetPosition)
 		{
-			Vector3 currentPoint = lineRenderer.GetPosition(index);
+			Vector3 currentPoint = lineRenderer!.GetPosition(index);
 			Vector3 newPosition = Vector3.MoveTowards(currentPoint, targetPosition, Time.deltaTime * 1.75f);
 			lineRenderer.SetPosition(index, newPosition);
 		}
 
 		private bool HasReachedPosition(int index, Vector3 targetPosition)
 		{
-			Vector3 currentPosition = lineRenderer.GetPosition(index);
+			Vector3 currentPosition = lineRenderer!.GetPosition(index);
 
 			return (currentPosition == targetPosition);
 		}
 
 		private IEnumerator UpdateParticle()
 		{
-			var emission = splashParticle.emission;
+			var emission = splashParticle!.emission;
 			splashParticle.Play();
 			while (gameObject.activeSelf)
 			{

@@ -13,7 +13,7 @@ namespace BeerMod.MovementInfluence
 		[HarmonyPostfix]
 		static void PostInputMovementX(ref float __result)
 		{
-			if (BeerValuable.BeerValuableClass.InvertInputActive)
+			if (BeerValuable.BeerValuableClass.InvertInputActive && BeerValuable.BeerValuableClass.InvertX)
 			{
 				// Debug.Log("EDITING LOCAL INPUTMOVEMENT X");
 				__result = -__result;
@@ -23,7 +23,7 @@ namespace BeerMod.MovementInfluence
 		[HarmonyPostfix]
 		static void Post_InputMovementY(ref float __result)
 		{
-			if (BeerValuable.BeerValuableClass.InvertInputActive)
+			if (BeerValuable.BeerValuableClass.InvertInputActive && BeerValuable.BeerValuableClass.InvertY)
 			{
 				//  Debug.Log("EDITING LOCAL INPUTMOVEMENT Y");
 				__result = -__result;
@@ -39,7 +39,31 @@ namespace BeerMod.MovementInfluence
 			{
 				float mx = Input.GetAxis("Mouse X");
 				float my = Input.GetAxis("Mouse Y");
-				__instance.cameraGameObject.transform.Rotate(-my, -mx, 0f);
+				if (BeerValuable.BeerValuableClass.InvertMouseX)
+					mx = -mx;
+				if (BeerValuable.BeerValuableClass.InvertMouseY)
+					my = -my;
+				__instance.cameraGameObject.transform.Rotate(-my, mx, 0f);
+				if (BeerValuable.BeerValuableClass.TiltActive)
+				{
+					Transform cam = __instance.cameraGameObject.transform;
+					Vector3 current = cam.localEulerAngles;
+					if (current.x > 180f)
+						current.x -= 360f;
+					if (current.z > 180f)
+						current.z -= 360f;
+					Vector3 targetEuler = new Vector3(
+						current.x + BeerValuable.BeerValuableClass.TiltAngleX,
+						__instance.cameraGameObject.transform.localEulerAngles.y,
+						current.z + BeerValuable.BeerValuableClass.TiltAngleZ
+					);
+					float tiltSpeed = BeerValuable.BeerValuableClass.TiltSpeed;
+					cam.localEulerAngles = Vector3.Lerp(
+						current,
+						targetEuler,
+						Time.deltaTime * tiltSpeed
+					);
+				}
 			}
 		}
 	}

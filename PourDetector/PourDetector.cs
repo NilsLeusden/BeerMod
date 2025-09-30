@@ -6,17 +6,16 @@ namespace BeerMod.PourDetector
 	public class PourDetector : MonoBehaviour
 	{
 		private int pourThreshold;
-		public Transform Origin = null;
-		public GameObject PourStreamPrefab = null;
+		public Transform? Origin;
+		public GameObject? PourStreamPrefab;
 
 		private bool isPouring;
 
-		private PourStream.PourStreamClass currentPourStream = null;
-
+		private PourStream.PourStreamClass? currentPourStream;
 
         private void Awake()
         {
-            pourThreshold = Settings.SettingsClass.pourAngle.Value;
+            pourThreshold = Settings.SettingsClass.PourAngle!.Value;
         }
 		private void Update()
 		{
@@ -29,7 +28,6 @@ namespace BeerMod.PourDetector
 				else
 					EndPour();
 			}
-
 		}
 
 		private void StartPour()
@@ -40,7 +38,7 @@ namespace BeerMod.PourDetector
 
 		private void EndPour()
 		{
-			currentPourStream.End();
+			currentPourStream!.End();
 			currentPourStream = null;
 		}
 
@@ -50,8 +48,8 @@ namespace BeerMod.PourDetector
 	}
 		private PourStream.PourStreamClass CreatePourStream()
 		{
-			GameObject PourStreamObject = Instantiate(PourStreamPrefab, Origin.position, Quaternion.identity, transform);
-			return (PourStreamObject.GetComponent<PourStream.PourStreamClass>());
+			GameObject PourStreamObject = Instantiate(PourStreamPrefab!, Origin!.position, Quaternion.identity, transform);
+			return (PourStreamObject!.GetComponent<PourStream.PourStreamClass>());
 		}
 	}
 }
