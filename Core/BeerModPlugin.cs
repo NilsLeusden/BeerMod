@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BeerMod.Core
 {
 
-	[BepInPlugin("NilsThatBoi.BeerMod", "BeerMod", "1.0.3")]
+	[BepInPlugin("NilsThatBoi.BeerMod", "BeerMod", "1.0.4")]
 
 	public class BeerModClass : BaseUnityPlugin
 	{
@@ -22,10 +22,6 @@ namespace BeerMod.Core
 			this.gameObject.transform.parent = null;
 			this.gameObject.hideFlags = HideFlags.HideAndDontSave;
 			Settings.SettingsClass.Initialize(Config);
-
-			Logger.LogInfo($"[Config] pourAngle={Settings.SettingsClass.PourAngle!.Value}, voiceChatPitch={Settings.SettingsClass.VoiceChatPitch!.Value}, "
-			+ $"playerSpeed={Settings.SettingsClass.PlayerSpeed!.Value}, lookSpeed={Settings.SettingsClass.LookSpeed!.Value}, …");
-			Patch();
 
 			Logger.LogInfo($"{Info.Metadata.GUID} v{Info.Metadata.Version} has loaded!");
 		}

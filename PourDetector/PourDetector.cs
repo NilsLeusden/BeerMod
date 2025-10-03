@@ -13,10 +13,10 @@ namespace BeerMod.PourDetector
 
 		private PourStream.PourStreamClass? currentPourStream;
 
-        private void Awake()
-        {
-            pourThreshold = Settings.SettingsClass.PourAngle!.Value;
-        }
+		private void Awake()
+		{
+			pourThreshold = Settings.SettingsClass.PourAngle!.Value;
+		}
 		private void Update()
 		{
 			bool pourCheck = CalculatePourAngle() > pourThreshold;

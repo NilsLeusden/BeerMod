@@ -83,6 +83,8 @@ namespace BeerMod.BeerValuable
 
 		private bool stateStart;
 
+		private bool localMsgHasPlayed;
+
 		private PhysGrabObject? physGrabObject;
 
 		private PhotonView? photonView;
@@ -227,13 +229,12 @@ namespace BeerMod.BeerValuable
 		}
 		private void StateActive()
 		{
-			if (stateStart)
+			if (stateStart && physGrabObject!.grabbedLocal)
 			{
 				_invertRoutine = StartCoroutine(InversionCycle());
-				SendMessage();
+				localMsgHasPlayed = false;
 				stateStart = false;
 			}
-
 			soundPitchLerp = Mathf.Lerp(soundPitchLerp, 1f, Time.deltaTime * 2f);
 			foreach (PhysGrabber item in physGrabObject!.playerGrabbing)
 			{
@@ -242,16 +243,23 @@ namespace BeerMod.BeerValuable
 					item.playerAvatar.voiceChat.OverridePitch(voiceChatPitch, 1f, 2f);
 				}
 			}
-			if (SemiFunc.IsMasterClientOrSingleplayer())
+			if (SemiFunc.IsMasterClientOrSingleplayer() && !physGrabObject.grabbed)
 			{
-				if (!physGrabObject.grabbed)
-				{
-					SetState(States.Idle);
-				}
+				SetState(States.Idle);
 			}
 			if (physGrabObject.grabbedLocal)
 			{
 				GrabEffects();
+				TrySendLocalMessage();
+			}
+		}
+
+		private void TrySendLocalMessage()
+		{
+			if (!localMsgHasPlayed)
+			{
+				SendMessage();
+				localMsgHasPlayed = true;
 			}
 		}
 
@@ -309,6 +317,7 @@ namespace BeerMod.BeerValuable
 				InvertMouseY = false;
 			}
 		}
+
 		public void ResetInversion()
 		{
 			StopAllCoroutines();
@@ -326,7 +335,7 @@ namespace BeerMod.BeerValuable
 			string message = beerPhrases[Random.Range(0, beerPhrases.Length)];
 			Color textColor = new Color(0.95f, 0.8f, 0.1f, 1f);
 			ChatManager.instance.PossessChatScheduleStart(10);
-			ChatManager.instance.PossessChat(ChatManager.PossessChatID.LovePotion, message, 1f, textColor);
+			ChatManager.instance.PossessChat(ChatManager.PossessChatID.None, message, 1f, textColor);
 			ChatManager.instance.PossessChatScheduleEnd();
 			return;
 		}

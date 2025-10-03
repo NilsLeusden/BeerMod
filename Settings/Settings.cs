@@ -227,32 +227,3 @@ namespace BeerMod.Settings
 		}
 	}
 }
-
-
-			//instance.voiceChat.OverridePitch(0.65f, 1f, 2f);
-
-			//physGrabObject.OverrideDrag(1f);
-
-			//physGrabObject.OverrideAngularDrag(0.5f);
-
-			//CameraZoom.Instance.OverrideZoomSet(20f, 0.1f, 0.5f, 1f, base.gameObject, 0);
-
-			//PostProcessing.Instance.SaturationOverride(30f, 0.1f, 0.5f, 0.1f, base.gameObject);
-
-			//PlayerController.instance.OverrideSpeed(0.8f);
-
-			//PlayerController.instance.OverrideLookSpeed(0.8f, 2f, 1f);
-
-			//PlayerController.instance.OverrideAnimationSpeed(0.4f, 1f, 2f);
-
-			//PlayerController.instance.OverrideTimeScale(0.6f);
-
-			//physGrabObject.OverrideTorqueStrength(1f);
-
-			//instance.OverridePupilSize(2f, 4, 1f, 1f, 5f, 0.5f);
-
-
-		//	TiltChance = 1f;
-		//	TiltDegreeX = 3f;
-		//	TiltDegreeZ = 10f;
-		// 	public static float TiltSpeed { get; private set; } = 2f;
