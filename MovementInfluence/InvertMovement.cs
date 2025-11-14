@@ -25,7 +25,7 @@ namespace BeerMod.MovementInfluence
 		{
 			if (BeerValuable.BeerValuableClass.InvertInputActive && BeerValuable.BeerValuableClass.InvertY)
 			{
-				//  Debug.Log("EDITING LOCAL INPUTMOVEMENT Y");
+				// Debug.Log("EDITING LOCAL INPUTMOVEMENT Y");
 				__result = -__result;
 			}
 		}

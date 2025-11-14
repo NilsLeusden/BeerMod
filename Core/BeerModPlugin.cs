@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BeerMod.Core
 {
 
-	[BepInPlugin("NilsThatBoi.BeerMod", "BeerMod", "1.0.4")]
+	[BepInPlugin("NilsThatBoi.BeerMod", "BeerMod", "1.0.5")]
 
 	public class BeerModClass : BaseUnityPlugin
 	{
@@ -22,7 +22,7 @@ namespace BeerMod.Core
 			this.gameObject.transform.parent = null;
 			this.gameObject.hideFlags = HideFlags.HideAndDontSave;
 			Settings.SettingsClass.Initialize(Config);
-
+			Patch();
 			Logger.LogInfo($"{Info.Metadata.GUID} v{Info.Metadata.Version} has loaded!");
 		}
 
