@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,6 @@ namespace BeerMod.PourStream
 
 		private ParticleSystem? splashParticle;
 		private ParticleSystem.EmissionModule splashEmission;
-
 
 		private Coroutine? pourRoutine;
 
@@ -58,7 +58,7 @@ namespace BeerMod.PourStream
 			{
 				if (pourSound != null)
 				{
-					pourSound.PlayLoop(true, fadeInSpeed: 0.1f, fadeOutSpeed: 0.1f);
+					pourSound.PlayLoop(true, 0.1f, 0.1f, 1f, 1f);
 				}
 				targetPosition = FindEndPoint();
 				DrawParabolicArc(transform.position, targetPosition);
@@ -86,7 +86,7 @@ namespace BeerMod.PourStream
 		{
 			if (pourSound != null)
 			{
-				pourSound.PlayLoop(playing: false, fadeInSpeed: 0.1f, fadeOutSpeed: 0.1f);
+				pourSound.PlayLoop(false, 0.1f, 0.1f, 1f, 1f);
 			}
 			if (pourRoutine != null)
 					StopCoroutine(pourRoutine);

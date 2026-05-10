@@ -6,7 +6,8 @@ using UnityEngine;
 namespace BeerMod.Core
 {
 
-	[BepInPlugin("NilsThatBoi.BeerMod", "BeerMod", "1.0.5")]
+	[BepInPlugin("NilsThatBoi.BeerMod", "BeerMod", "1.0.6")]
+	[BepInDependency(REPOLib.MyPluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
 
 	public class BeerModClass : BaseUnityPlugin
 	{
@@ -35,10 +36,6 @@ namespace BeerMod.Core
 		internal void Unpatch()
 		{
 			Harmony?.UnpatchSelf();
-		}
-
-		private void Update()
-		{
 		}
 	}
 }
